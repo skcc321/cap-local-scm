@@ -47,13 +47,15 @@ class Capistrano::Local < Capistrano::SCM
       # preparing archive
       run_locally do
         exclude_list = begin
-                         gitignore = File.readlines('.gitignore').map(&:strip).reject do |ignored_file_name|
-                           ignored_file_name.empty? || ignored_file_name.start_with?('#') || ignored_file_name.start_with?('!')
-                         end.unshift('.git')
+                         gitignore = File.readlines('.capignore').map(&:strip).reject do |ignored_file_name|
+                           ignored_file_name.empty? || ignored_file_name.start_with?('#')
+                         end
 
                          gitignore.map do |ignored_file_name|
                            "--exclude='#{ignored_file_name.gsub(/\A\//, '')}'"
                          end.join(' ')
+                       rescue
+                         ''
                        end
 
 
